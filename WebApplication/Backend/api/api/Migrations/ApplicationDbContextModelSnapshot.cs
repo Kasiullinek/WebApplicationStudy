@@ -180,7 +180,7 @@ namespace api.Migrations
 
                     b.HasIndex("SetId");
 
-                    b.ToTable("RowModel");
+                    b.ToTable("RowModel", (string)null);
                 });
 
             modelBuilder.Entity("api.Models.SetModel", b =>
@@ -206,7 +206,7 @@ namespace api.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("SetModel");
+                    b.ToTable("SetModel", (string)null);
                 });
 
             modelBuilder.Entity("api.Models.UserModel", b =>
