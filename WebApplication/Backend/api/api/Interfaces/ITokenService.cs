@@ -1,9 +1,9 @@
-﻿using api.Models;
+﻿using api.Dtos;
 
 namespace api.Interfaces
 {
     public interface ITokenService
     {
-        string CreateToken(UserModel user);
+        string CreateToken(UserSession userSession);
     }
 }

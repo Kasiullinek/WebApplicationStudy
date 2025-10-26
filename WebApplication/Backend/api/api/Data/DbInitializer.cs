@@ -31,13 +31,13 @@ namespace api.Data
             }
             catch (Exception e) {}
 
-            if (_context.Roles.Any(x => x.Name == Utility.Helper.Admin))
+            if (_context.Roles.Any(x => x.Name == Utility.Roles.Admin))
             {
                 return;
             }
 
-            _roleManager.CreateAsync(new IdentityRole(Utility.Helper.Admin)).GetAwaiter().GetResult();
-            _roleManager.CreateAsync(new IdentityRole(Utility.Helper.User)).GetAwaiter().GetResult();
+            _roleManager.CreateAsync(new IdentityRole(Utility.Roles.Admin)).GetAwaiter().GetResult();
+            _roleManager.CreateAsync(new IdentityRole(Utility.Roles.User)).GetAwaiter().GetResult();
 
             _userManager.CreateAsync(new UserModel
             {
@@ -48,7 +48,7 @@ namespace api.Data
             }, "Admin123!").GetAwaiter().GetResult();
 
             UserModel admin = _context.Users.FirstOrDefault(x => x.Email == "admin@gmail.com");
-            _userManager.AddToRoleAsync(admin, Utility.Helper.Admin).GetAwaiter().GetResult();
+            _userManager.AddToRoleAsync(admin, Utility.Roles.Admin).GetAwaiter().GetResult();
 
         }
     }

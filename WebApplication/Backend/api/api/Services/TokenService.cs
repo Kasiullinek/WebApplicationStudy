@@ -1,4 +1,5 @@
-﻿using api.Interfaces;
+﻿using api.Dtos;
+using api.Interfaces;
 using api.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -14,7 +15,7 @@ namespace api.Services
         {
             _config = config ?? throw new ArgumentException(nameof(config));
         }
-        public string CreateToken(UserModel user)
+        public string CreateToken(UserSession userSession)
         {
             var secretKey = _config["Jwt:TokenKey"];
 
@@ -28,16 +29,21 @@ namespace api.Services
 
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+                //new Claim(JwtRegisteredClaimNames.Sub, userSession.Id!),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                
+                new Claim(ClaimTypes.NameIdentifier, userSession.Id!),
+                new Claim(ClaimTypes.Name, userSession.UserName!),
+                new Claim(ClaimTypes.GivenName, userSession.FirstName!),
+                new Claim(ClaimTypes.Surname, userSession.LastName!),
+                new Claim(ClaimTypes.Email, userSession.Email!),
+                new Claim(ClaimTypes.Role, userSession.Role!)
+
             };
 
             var token = new JwtSecurityToken
                 (
-                    issuer: null,
-                    audience: null,
+                    issuer: _config["Jwt:Issuer"],
+                    audience: _config["Jwt:Audience"],
                     claims: claims,
                     expires: DateTime.UtcNow.AddMinutes(60),
                     signingCredentials: creds
@@ -45,5 +51,7 @@ namespace api.Services
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+
     }
 }

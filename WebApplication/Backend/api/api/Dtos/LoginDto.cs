@@ -1,16 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace api.ViewModels
+namespace api.Dtos
 {
-    // Model widoku dla formularza logowania
-    public class LoginVM
+    public class LoginDto
     {
-        // Adres email użytkownika
+        public string? Id { get; set; }
+
         [Required(ErrorMessage = "Email is missing!")]
         [DataType(DataType.EmailAddress)]
         public string? Email { get; set; }
 
-        // Hasło użytkownika
         [Required(ErrorMessage = "Password is missing!")]
         [DataType(DataType.Password)]
         public string? Password { get; set; }
