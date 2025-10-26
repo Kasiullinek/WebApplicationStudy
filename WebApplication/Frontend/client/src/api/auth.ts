@@ -4,7 +4,7 @@ const API_URL = 'http://localhost:5271/api/account';
 
 interface AuthResponse {
     token: string;
-    userName: string;
+    user: string;
 }
 
 export const login = async (email: string, password: string): Promise<AuthResponse> => {
@@ -14,21 +14,21 @@ export const login = async (email: string, password: string): Promise<AuthRespon
         return response.data;
     }
     catch(error: any) {
-        return error.response?.data || "Login failed!";
+        throw error.response?.data || "Login failed!";
     }
 };
 
 export const register = async(
     email: string,
     password: string,
-    confirmPassord: string,
+    confirmPassword: string,
 ): Promise<AuthResponse> => {
     try{
-        const response = await axios.post<AuthResponse>(`${API_URL}/register`, {email, password, confirmPassord});
+        const response = await axios.post<AuthResponse>(`${API_URL}/register`, {email, password, confirmPassword});
         return response.data;
     }
     catch(error: any) {
-        throw error.reponse?.data || "Registration failed!";
+        throw error.response?.data || "Registration failed!";
     }
 };
 

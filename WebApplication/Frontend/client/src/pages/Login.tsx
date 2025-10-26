@@ -1,6 +1,13 @@
 import React, { useState } from 'react'
 import { login } from '../api/auth';
 import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from "jwt-decode";
+
+interface JwtPayload {
+    sub: string;
+    role: string;
+    exp: number;
+}
 
 const Login: React.FC = () => {
     const[email, setEmail] = useState<string>('');
@@ -14,21 +21,22 @@ const Login: React.FC = () => {
         {
             const response = await login(email, password);
             localStorage.setItem('token', response.token);
-            localStorage.setItem('user', JSON.stringify(response.userName));
+            const decoded = jwtDecode<JwtPayload>(response.token);
+            localStorage.setItem('user', JSON.stringify(decoded));
             navigate('/home');
         }catch(error: any) {
-            setError(error.message || "Login failed!");
+            setError("Login failed!");
         }
     };
     return (
         <div className="flex justify-center items-center h-screen bg-gray-100">
-            <form onSubmit={handleSubmit} className="bg-white p-6 shadow-lg rounded-lg w-96">
-                <h2 className="text-2xl mb-4 font-bold text-center">Login</h2>
+            <form onSubmit={handleSubmit} className="bg-white p-6 shadow-l rounded-lg w-96">
+                <h2 className="text-2xl mb-4 font-bold text-center">Zaloguj się</h2>
                 {error && <div className="text-red-500 mb-4">{error}</div>}
                 <div className="mb-4">
                     <input
                         type="email"
-                        placeholder="Email"
+                        placeholder="Wprowadź swój adres e-mail"
                         className="w-full p-2 border border-gray-300 rounded"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
@@ -37,13 +45,13 @@ const Login: React.FC = () => {
                 <div className="mb-4">
                     <input
                         type="password"
-                        placeholder="Password"
+                        placeholder="Wprowadź swoje hasło"
                         className="w-full p-2 border border-gray-300 rounded"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required/>
                 </div>
-                <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">Login</button>
+                <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">Zaloguj</button>
             </form>
         </div>
     )
