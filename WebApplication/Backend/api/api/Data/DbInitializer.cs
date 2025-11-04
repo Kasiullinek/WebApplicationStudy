@@ -1,5 +1,6 @@
 ﻿using api.Interfaces;
 using api.Models;
+using api.Utility;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -50,6 +51,14 @@ namespace api.Data
             UserModel admin = _context.Users.FirstOrDefault(x => x.Email == "admin@gmail.com");
             _userManager.AddToRoleAsync(admin, Utility.Roles.Admin).GetAwaiter().GetResult();
 
+            // Seed initial vocabulary data for Admin
+            if (!_context.Sets.Any())
+            {
+                var adminId = admin.Id;
+                Vocabulary.InitializeSets(_context, adminId);
+            }
+
         }
+
     }
 }

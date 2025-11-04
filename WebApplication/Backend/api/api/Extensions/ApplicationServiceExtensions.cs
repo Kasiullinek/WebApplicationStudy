@@ -23,12 +23,15 @@ namespace api.Extensions
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             //Identity & Configure SignIn
-            services.AddIdentity<UserModel, IdentityRole>(options => {
+            services.AddIdentityCore<UserModel>(options =>
+            {
                 options.SignIn.RequireConfirmedAccount = false;
                 options.SignIn.RequireConfirmedEmail = false;
                 options.SignIn.RequireConfirmedPhoneNumber = false;
-                }).AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
+            })
+            .AddRoles<IdentityRole>()
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
 
             services.AddControllers();
             services.AddCors();
@@ -70,11 +73,16 @@ namespace api.Extensions
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey)),
                     };
                 });
+            services.AddAuthorization();
 
             //Services
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IDbInitializer, DbInitializer>();
             services.AddScoped<IUserAccount, AccountRepo>();
+            services.AddScoped<IVocabularySet, VocabularySetRepo>();
+
+            // HttpContextAccessor
+            services.AddHttpContextAccessor();
 
             return services;
         }
