@@ -11,10 +11,8 @@ namespace api.Data
 
         }
 
-        //// DbSet reprezentujący użytkowników
-        //public DbSet<RowModel> rowModel { get; set; }
+        public DbSet<RowModel> Rows { get; set; } = null!;
 
-        //// DbSet reprezentujący użytkowników
-        //public DbSet<SetModel> setModel { get; set; }
+        public DbSet<SetModel> Sets { get; set; } = null!;
     }
 }

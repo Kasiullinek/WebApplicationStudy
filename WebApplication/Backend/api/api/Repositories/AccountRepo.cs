@@ -3,6 +3,8 @@ using api.Dtos;
 using Microsoft.AspNetCore.Identity;
 using static api.Dtos.ServiceResponse;
 using api.Models;
+using api.Utility;
+using api.Data;
 
 namespace api.Repositories
 {
@@ -10,11 +12,13 @@ namespace api.Repositories
     {
         private readonly ITokenService _tokenService;
         private readonly UserManager<UserModel> _userManager;
+        private readonly ApplicationDbContext _context;
 
-        public AccountRepo(ITokenService tokenService, UserManager<UserModel> userManager)
+        public AccountRepo(ITokenService tokenService, UserManager<UserModel> userManager, ApplicationDbContext context)
         {
             _tokenService = tokenService;
             _userManager = userManager;
+            _context = context;
         }
 
         public async Task<DetailedResponse> LoginAccount(LoginDto loginDto)
@@ -75,7 +79,10 @@ namespace api.Repositories
                 return new GeneralResponse(false, "Registration failed... Please try again.");
             }
 
-            await _userManager.AddToRoleAsync(newUser, Utility.Roles.User);
+            await _userManager.AddToRoleAsync(newUser, Roles.User);
+
+            Vocabulary.InitializeSets(_context, newUser.Id);
+
             return new GeneralResponse(true, "Account created!");
 
         }

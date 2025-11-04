@@ -1,5 +1,7 @@
 using api.Extensions;
 using api.Interfaces;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,7 +10,32 @@ builder.Services.AddApplicationService(builder.Configuration);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+//Add Authentication to Swagger UI (Crtl + F5)
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme. Example: 'Bearer {token}'",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer"
+    });
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
 
 var app = builder.Build();
 
@@ -32,7 +59,7 @@ using (var scope = app.Services.CreateScope())
     {
         app.UseSwagger();
         app.UseSwaggerUI();
-    }
+}
 
 app.UseHttpsRedirection();
 
@@ -41,6 +68,8 @@ app.UseCors(builder => builder
 .AllowAnyMethod()
 .AllowCredentials()
 .WithOrigins("http://localhost:3000"));
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
