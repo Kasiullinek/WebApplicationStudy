@@ -57,7 +57,7 @@ const Header: React.FC = () => {
     <header className="border-b border-gray-200 bg-white">
       <div className="container mx-auto flex flex-wrap items-center justify-between py-4 px-4">
         <a href="#" className="flex items-center mb-2 md:mb-0 text-gray-900 no-underline">
-          <h2 className="text-2xl font-semibold">WebAplication</h2>
+          <h2 className="text-2xl font-semibold">Aplikacja Internetowa</h2>
         </a>
 
         <ul className="flex flex-col md:flex-row gap-2 md:gap-6 text-center">
@@ -71,7 +71,7 @@ const Header: React.FC = () => {
             <li><Link to="/admin-panel" className="text-red-600 hover:text-red-700 transition">Panel Admina</Link></li>
           )}
           {role === "User" && (
-            <li><Link to="/user-profile" className="text-green-600 hover:text-green-700 transition">Mój Profil</Link></li>
+            <li><Link to="/user-vocabulary-sets" className="text-green-600 hover:text-green-700 transition">Moje Zestawy</Link></li>
           )}
         </ul>
 
