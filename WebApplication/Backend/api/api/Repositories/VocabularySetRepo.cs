@@ -30,29 +30,10 @@ namespace api.Repositories
             return _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier) ?? _httpContextAccessor.HttpContext?.User?.FindFirstValue(JwtRegisteredClaimNames.Sub);
         }
 
-        // Pobiera ID administratora
-        private async Task<string?> GetAdminId()
-        {
-            var adminRole = await _context.Roles.FirstOrDefaultAsync(r => r.Name == Roles.Admin);
-            if (adminRole == null)
-            {
-                return null;
-            }
-
-            var admin = await _context.UserRoles.FirstOrDefaultAsync(ur => ur.RoleId == adminRole.Id);
-            if (admin == null)
-            {
-                return null;
-            }
-
-            return admin.UserId;
-        }
-
-
         // GET: Wszystkie podstawowe zestawy
         public async Task<IEnumerable<SetDto>> GetBasicSets()
         {
-            var adminId = await GetAdminId();
+            var adminId = await AdminHelper.GetAdminIdAsync(_context);
             if (adminId == null)
             {
                 return new List<SetDto>();
@@ -81,7 +62,7 @@ namespace api.Repositories
         // GET: Pojedynczy podstawowy zestaw
         public async Task<SetDto> GetBasicSet(int setId)
         {
-            var adminId = await GetAdminId();
+            var adminId = await AdminHelper.GetAdminIdAsync(_context);
             if (adminId == null)
             {
                 return new SetDto();

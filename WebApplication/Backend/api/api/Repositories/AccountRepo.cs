@@ -5,6 +5,7 @@ using static api.Dtos.ServiceResponse;
 using api.Models;
 using api.Utility;
 using api.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace api.Repositories
 {
@@ -19,6 +20,44 @@ namespace api.Repositories
             _tokenService = tokenService;
             _userManager = userManager;
             _context = context;
+        }
+
+        private async Task CloneAdminSetsForNewUserAsync(string newUserId)
+        {
+            var adminId = await AdminHelper.GetAdminIdAsync(_context);
+            if (adminId == null)
+            {
+                return;
+            }
+
+            var adminSets = await _context.Sets
+                .Where(s => s.UserId == adminId)
+                .Include(s => s.Rows)
+                .ToListAsync();
+
+            if (adminSets == null || adminSets.Count == 0)
+            {
+                return;
+            }
+
+            foreach (var adminSet in adminSets)
+            {
+                var newSet = new SetModel
+                {
+                    Title = adminSet.Title,
+                    UserId = newUserId,
+                    CreatedAt = DateTime.UtcNow,
+                    Rows = adminSet.Rows.Select(r => new RowModel
+                    {
+                        Term = r.Term,
+                        Translation = r.Translation
+                    }).ToList()
+                };
+
+                _context.Sets.Add(newSet);
+            }
+
+            await _context.SaveChangesAsync();
         }
 
         public async Task<DetailedResponse> LoginAccount(LoginDto loginDto)
@@ -80,8 +119,8 @@ namespace api.Repositories
             }
 
             await _userManager.AddToRoleAsync(newUser, Roles.User);
-            
-            Vocabulary.InitializeSets(_context, newUser.Id);
+
+            await CloneAdminSetsForNewUserAsync(newUser.Id);
 
             return new GeneralResponse(true, "Account created!");
 
