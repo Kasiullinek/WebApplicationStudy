@@ -5,6 +5,8 @@ namespace api.Interfaces
 {
     public interface IVocabularySet
     {
+        Task<IEnumerable<SetDto>> GetBasicSets();
+        Task<SetDto> GetBasicSet(int setId);
         Task<IEnumerable<SetDto>> GetUserSets();
         Task<SetDto> GetUserSet(int setId);
         Task<GeneralResponse> UpdateSet(SetDto setDto);

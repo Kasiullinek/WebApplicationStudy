@@ -80,7 +80,7 @@ namespace api.Repositories
             }
 
             await _userManager.AddToRoleAsync(newUser, Roles.User);
-
+            
             Vocabulary.InitializeSets(_context, newUser.Id);
 
             return new GeneralResponse(true, "Account created!");
