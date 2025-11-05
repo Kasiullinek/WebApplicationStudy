@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using api.Models;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
+using api.Utility;
 
 namespace api.Repositories
 {
@@ -29,6 +30,86 @@ namespace api.Repositories
             return _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier) ?? _httpContextAccessor.HttpContext?.User?.FindFirstValue(JwtRegisteredClaimNames.Sub);
         }
 
+        // Pobiera ID administratora
+        private async Task<string?> GetAdminId()
+        {
+            var adminRole = await _context.Roles.FirstOrDefaultAsync(r => r.Name == Roles.Admin);
+            if (adminRole == null)
+            {
+                return null;
+            }
+
+            var admin = await _context.UserRoles.FirstOrDefaultAsync(ur => ur.RoleId == adminRole.Id);
+            if (admin == null)
+            {
+                return null;
+            }
+
+            return admin.UserId;
+        }
+
+
+        // GET: Wszystkie podstawowe zestawy
+        public async Task<IEnumerable<SetDto>> GetBasicSets()
+        {
+            var adminId = await GetAdminId();
+            if (adminId == null)
+            {
+                return new List<SetDto>();
+            }
+
+            return await _context.Sets
+                .Where(s => s.UserId == adminId)
+                .Select(s => new SetDto
+                {
+                    Id = s.Id,
+                    UserId = s.UserId,
+                    Title = s.Title,
+                    CreatedAt = s.CreatedAt,
+                    Rows = _context.Rows
+                        .Where(r => r.SetId == s.Id)
+                        .Select(r => new RowDto
+                        {
+                            Id = r.Id,
+                            SetId = r.SetId,
+                            Term = r.Term,
+                            Translation = r.Translation
+                        }).ToList()
+                }).ToListAsync();
+        }
+
+        // GET: Pojedynczy podstawowy zestaw
+        public async Task<SetDto> GetBasicSet(int setId)
+        {
+            var adminId = await GetAdminId();
+            if (adminId == null)
+            {
+                return new SetDto();
+            }
+
+            var set = await _context.Sets.FirstOrDefaultAsync(s => s.Id == setId && s.UserId == adminId);
+            if (set is null)
+            {
+                return null;
+            }
+
+            return new SetDto
+            {
+                Id = set.Id,
+                UserId = set.UserId,
+                Title = set.Title,
+                CreatedAt = set.CreatedAt,
+                Rows = await _context.Rows
+                    .Where(r => r.SetId == set.Id)
+                    .Select(r => new RowDto
+                    {
+                        Id = r.Id,
+                        SetId = r.SetId,
+                        Term = r.Term,
+                        Translation = r.Translation
+                    }).ToListAsync()
+            };
+        }
 
         // GET: Wszystkie zestawy użytkownika
         public async Task<IEnumerable<SetDto>> GetUserSets()

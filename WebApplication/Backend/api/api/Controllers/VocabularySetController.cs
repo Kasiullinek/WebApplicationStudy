@@ -9,6 +9,22 @@ namespace api.Controllers
     [ApiController]
     public class VocabularySetController(IVocabularySet vocabularySet) : ControllerBase
     {
+        [AllowAnonymous]
+        [HttpGet("GetBasicSets")]
+        public async Task<ActionResult<IEnumerable<SetDto>>> GetBasicSets()
+        {
+            var result = await vocabularySet.GetBasicSets();
+            return Ok(result);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("GetBasicSet")]
+        public async Task<ActionResult<SetDto>> GetBasicSet(int setId)
+        {
+            var result = await vocabularySet.GetBasicSet(setId);
+            return Ok(result);
+        }
+
         [Authorize(Roles = "User")]
         [HttpGet("GetUserSets")]
         public async Task<ActionResult<IEnumerable<SetDto>>> GetUserSets()

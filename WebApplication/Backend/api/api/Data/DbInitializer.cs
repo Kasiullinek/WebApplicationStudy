@@ -32,13 +32,13 @@ namespace api.Data
             }
             catch (Exception e) {}
 
-            if (_context.Roles.Any(x => x.Name == Utility.Roles.Admin))
+            if (_context.Roles.Any(x => x.Name == Roles.Admin))
             {
                 return;
             }
 
-            _roleManager.CreateAsync(new IdentityRole(Utility.Roles.Admin)).GetAwaiter().GetResult();
-            _roleManager.CreateAsync(new IdentityRole(Utility.Roles.User)).GetAwaiter().GetResult();
+            _roleManager.CreateAsync(new IdentityRole(Roles.Admin)).GetAwaiter().GetResult();
+            _roleManager.CreateAsync(new IdentityRole(Roles.User)).GetAwaiter().GetResult();
 
             _userManager.CreateAsync(new UserModel
             {
@@ -49,7 +49,7 @@ namespace api.Data
             }, "Admin123!").GetAwaiter().GetResult();
 
             UserModel admin = _context.Users.FirstOrDefault(x => x.Email == "admin@gmail.com");
-            _userManager.AddToRoleAsync(admin, Utility.Roles.Admin).GetAwaiter().GetResult();
+            _userManager.AddToRoleAsync(admin, Roles.Admin).GetAwaiter().GetResult();
 
             // Seed initial vocabulary data for Admin
             if (!_context.Sets.Any())
