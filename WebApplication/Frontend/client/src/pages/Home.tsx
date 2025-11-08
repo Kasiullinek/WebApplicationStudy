@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import BasicSets from "../components/BasicSets";
 
 const Home = () => {
   return (
@@ -93,6 +94,12 @@ const Home = () => {
               </a>
             ))}
           </div>
+        </section>
+
+        {/* Podstawowe zestawy */}
+        <section id="basic-sets" className="px-6 py-16">
+          <h2 className="text-3xl font-semibold border-b border-gray-200 pb-2 mb-10">Podstawowe zestawy</h2>
+            <BasicSets/>
         </section>
       </main>
       

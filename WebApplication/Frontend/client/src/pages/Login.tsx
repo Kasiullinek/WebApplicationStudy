@@ -2,12 +2,7 @@ import React, { useState } from 'react'
 import { login } from '../api/auth';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
-
-interface JwtPayload {
-    sub: string;
-    role: string;
-    exp: number;
-}
+import type { IJwtPayload } from '../interfaces/IJWTPayload';
 
 const Login: React.FC = () => {
     const[email, setEmail] = useState<string>('');
@@ -21,8 +16,8 @@ const Login: React.FC = () => {
         {
             const response = await login(email, password);
             localStorage.setItem('token', response.token);
-            const decoded = jwtDecode<JwtPayload>(response.token);
-            localStorage.setItem('user', JSON.stringify(decoded));
+            const decoded = jwtDecode<IJwtPayload>(response.token);
+            localStorage.setItem('role', JSON.stringify(decoded));
             navigate('/home');
         }catch(error: any) {
             setError("Login failed!");

@@ -9,7 +9,7 @@ const Header: React.FC = () => {
 
   useEffect(() => {
     const readRole = () => {
-      const userData = localStorage.getItem('user');
+      const userData = localStorage.getItem('role');
       if (!userData) {
         setRole(null);
         return;
@@ -36,13 +36,10 @@ const Header: React.FC = () => {
         setRole(null);
       }
     };
-
-    // read on mount and when location changes (after navigate)
     readRole();
 
-    // listen to storage changes (other tabs)
     const onStorage = (e: StorageEvent) => {
-      if (e.key === 'user') readRole();
+      if (e.key === 'role') readRole();
     };
     window.addEventListener('storage', onStorage);
     return () => window.removeEventListener('storage', onStorage);
@@ -51,7 +48,7 @@ const Header: React.FC = () => {
     const handleLogout = () => {
         logout();
         setRole(null);
-        navigate('/'); // przekierowanie po wylogowaniu
+        navigate('/');
   };     
   return (
     <header className="border-b border-gray-200 bg-white">
