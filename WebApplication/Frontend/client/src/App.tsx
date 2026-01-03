@@ -3,9 +3,10 @@ import './App.css'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Home from './pages/Home'
+import Flashcards from './pages/games/Flashcards'
 
 function App() {
-
+  
   return (
     <Router>
       <Routes>
@@ -13,6 +14,7 @@ function App() {
           <Route path="/home" element={<Home/>}/>
           <Route path="/login" element={<Login/>}/>
           <Route path="/register" element={<Register/>}/>
+          <Route path="/games/flashcards" element={<Flashcards/>}/>
       </Routes>
     </Router>
   )
