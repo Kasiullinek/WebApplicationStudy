@@ -1,9 +1,21 @@
-import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { Link, useLocation} from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import BasicSets from "../components/BasicSets";
 
 const Home = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.hash) {
+      const el = document.querySelector(location.hash);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, [location]);
+
   return (
     <div className="min-h-screen flex flex-col bg-white">
       {/* Nagłówek */}
@@ -67,6 +79,7 @@ const Home = () => {
               {
                 title: "Fiszki",
                 desc: "Szybkie powtórki słówek za pomocą fiszek.",
+                link: "/games/flashcards"
               },
               {
                 title: "Memory",
@@ -81,7 +94,7 @@ const Home = () => {
                 desc: "Sprawdź swoją wiedzę jak dobrze znasz materiał, wybierając odpowiednie odpowiedzi w mini-grze.",
               },
             ].map((game, i) => (
-              <a key={i} href="#" className="group relative block bg-blue-600 text-white rounded-3xl shadow-lg overflow-hidden h-64">
+              <a key={i} href={game.link} className="group relative block bg-blue-600 text-white rounded-3xl shadow-lg overflow-hidden h-64">
                 {/* Kontener do wyśrodkowania treści */}
                 <div className="absolute inset-0 flex items-center justify-center transition-opacity duration-300 group-hover:opacity-0">
                   <h3 className="text-2xl font-bold">{game.title}</h3>

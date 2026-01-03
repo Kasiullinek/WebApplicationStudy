@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { fetchBasicSets } from "../api/vocab"; 
-import type { ISetDto } from "../interfaces/ISetDto";
+import type { ISetDto } from "../interfaces/SetInterface";
 
 const BasicSets: React.FC = () => {
   const [sets, setSets] = useState<ISetDto[]>([]);
@@ -49,7 +49,7 @@ const BasicSets: React.FC = () => {
                 <p>Tytuł: {set.title}</p>
                 <p className="text-gray-500 text-sm"> Utworzono: {new Date(set.createdAt).toLocaleDateString()}</p>
               </div>
-              <button onClick={() => toggleExpand(set.id)} className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">{expandedSetIds.includes(set.id) ? "Zwiń listę" : "Rozwiń listę"}</button>
+              <button onClick={() => toggleExpand(set.id)} className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">{expandedSetIds.includes(set.id) ? "Zwiń listę ▲" : "Rozwiń listę ▼"}</button>
             </div>
 
             {expandedSetIds.includes(set.id) && (

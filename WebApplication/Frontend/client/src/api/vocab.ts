@@ -1,12 +1,24 @@
-import axios from "axios";
-import type { ISetDto } from "../interfaces/ISetDto";
+import api from "./axiosInstance";
+import type { ISet } from "../interfaces/SetInterface";
 
-const API_URL = 'http://localhost:5271/api/VocabularySet';
 
-export const fetchBasicSets = async (): Promise<ISetDto[]> => {
+const API_URL = '/VocabularySet';
+
+export const fetchBasicSets = async (): Promise<ISet[]> => {
     try
     {
-        const response = await axios.get<ISetDto[]>(`${API_URL}/GetBasicSets`);
+        const response = await api.get<ISet[]>(`${API_URL}/GetBasicSets`);
+        return response.data;
+    }
+    catch(error: any) {
+        throw error.response?.data || "Failed to Fetch Basic Vocabulary Sets!";
+    }
+};
+
+export const fetchUserSets = async (): Promise<ISet[]> => {
+    try
+    {
+        const response = await api.get<ISet[]>(`${API_URL}/GetUserSets`);
         return response.data;
     }
     catch(error: any) {

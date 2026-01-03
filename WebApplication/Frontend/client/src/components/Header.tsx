@@ -1,67 +1,23 @@
-import React, { useEffect, useState } from 'react'
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import { logout } from '../api/auth';
-
+import { Link} from "react-router-dom";
+import { useUserRole } from "../hooks/useUserRole";
+import { logout } from "../api/auth";
+ 
 const Header: React.FC = () => {
-  const [role, setRole] = useState<string | null>(null);
-  const navigate = useNavigate();
-  const location = useLocation();
+  const { role } = useUserRole();
 
-  useEffect(() => {
-    const readRole = () => {
-      const userData = localStorage.getItem('role');
-      if (!userData) {
-        setRole(null);
-        return;
-      }
-      try {
-        const parsed = JSON.parse(userData);
-        console.log("Console Log zalogowany użytkownik:", parsed);
-
-        let r: any = null;
-        if (parsed && typeof parsed === 'object') {
-          r =
-            parsed.role ??
-            parsed.Role ??
-            (Array.isArray(parsed.roles) ? parsed.roles[0] : parsed.roles) ??
-            parsed['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] ??
-            parsed.userName ??
-            parsed.sub ??
-            null;
-        } else if (typeof parsed === 'string') {
-          r = parsed;
-        }
-        setRole(r);
-      } catch {
-        setRole(null);
-      }
-    };
-    readRole();
-
-    const onStorage = (e: StorageEvent) => {
-      if (e.key === 'role') readRole();
-    };
-    window.addEventListener('storage', onStorage);
-    return () => window.removeEventListener('storage', onStorage);
-  }, [location]);
-
-    const handleLogout = () => {
-        logout();
-        setRole(null);
-        navigate('/');
-  };     
   return (
     <header className="border-b border-gray-200 bg-white">
       <div className="container mx-auto flex flex-wrap items-center justify-between py-4 px-4">
-        <a href="#" className="flex items-center mb-2 md:mb-0 text-gray-900 no-underline">
+        <Link to="/" className="flex items-center mb-2 md:mb-0 text-gray-900 no-underline">
           <h2 className="text-2xl font-semibold">Aplikacja Internetowa</h2>
-        </a>
+        </Link>
 
         <ul className="flex flex-col md:flex-row gap-2 md:gap-6 text-center">
-          <li><a href="#" className="text-gray-500 hover:text-blue-600 transition">Strona główna</a></li>
-          <li><a href="#about" className="text-gray-800 hover:text-blue-600 transition">O stronie</a></li>
-          <li><a href="#instructions" className="text-gray-800 hover:text-blue-600 transition">Instrukcje</a></li>
-          <li><a href="#avaiable-games" className="text-gray-800 hover:text-blue-600 transition">Gry</a></li>
+          <li><Link to="/" className="text-gray-500 hover:text-blue-600 transition">Strona główna</Link></li>
+          <li><Link to="/home#about" className="text-gray-800 hover:text-blue-600 transition">O stronie</Link></li>
+          <li><Link to="/home#instructions" className="text-gray-800 hover:text-blue-600 transition">Instrukcje</Link></li>
+          <li><Link to="/home#avaiable-games" className="text-gray-800 hover:text-blue-600 transition">Gry</Link></li>
+          <li><Link to="/home#basic-sets"className="text-gray-800 hover:text-blue-600 transition">Zestawy</Link></li>
 
           {/* Różne sekcje w zależności od roli */}
           {role === "Admin" && (
@@ -77,7 +33,7 @@ const Header: React.FC = () => {
           {role ? (
             <>
               <span className="text-gray-700 flex items-center">Zalogowano jako: <b className="ml-1">{role}</b></span>
-              <button onClick={handleLogout} className="border border-red-600 text-red-600 px-4 py-2 rounded-md hover:bg-red-50 transition text-center"> Wyloguj </button>
+              <button onClick={() => {logout(); window.location.reload();}}className="border border-red-600 text-red-600 px-4 py-2 rounded-md hover:bg-red-50 transition text-center"> Wyloguj </button>
             </>
           ) : (
             <>
