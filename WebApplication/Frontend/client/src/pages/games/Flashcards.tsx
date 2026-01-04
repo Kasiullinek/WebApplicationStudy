@@ -42,8 +42,8 @@ return (
   <div className="min-h-screen flex flex-col bg-white">
     {/* Nagłówek */}
     <Header/>
-
-      <div className="flex flex-col md:flex-row h-screen bg-gray-50">
+    {/* Zawartość strony */}
+    <div className="flex flex-col md:flex-row h-screen bg-gray-50">
       {/* Panel boczny */}
       <Sidebar filteredSets={filteredSets} selectedSets={selectedSets} expandedSetIds={expandedSetIds} search={search} setSearch={setSearch} toggleExpand={toggleExpand} handleSelectSet={handleSelectSet} gameStarted={gameStarted}/>
 

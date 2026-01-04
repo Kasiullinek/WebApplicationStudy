@@ -22,6 +22,6 @@ export const fetchUserSets = async (): Promise<ISet[]> => {
         return response.data;
     }
     catch(error: any) {
-        throw error.response?.data || "Failed to Fetch Basic Vocabulary Sets!";
+        throw error.response?.data || "Failed to Fetch User Vocabulary Sets!";
     }
 };

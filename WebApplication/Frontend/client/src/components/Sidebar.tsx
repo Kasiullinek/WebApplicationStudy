@@ -30,7 +30,6 @@ const Sidebar: React.FC<SidebarProps> = ({
                   <span className="font-medium">{set.title}</span>
                   <span className="text-gray-500 text-sm">{set.rows.length} słówek</span>
                 </div>
-
                 <div className="flex items-center gap-2">
                   <button className="text-gray-500 hover:text-gray-700" onClick={(e) => { e.stopPropagation(); toggleExpand(set.id); }}> {isExpanded ? "▲" : "▼"}</button>
                   <input type="checkbox" checked={isSelected} onChange={() => handleSelectSet(set)} disabled={gameStarted} onClick={(e) => e.stopPropagation()} style={{ transform: "scale(1.5)" }}/>
