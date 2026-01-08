@@ -1,30 +1,18 @@
-import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom';
-import { register } from '../api/auth';
+import { Link} from 'react-router-dom';
+import { useRegister } from '../hooks/useRegister';
 
 const Register: React.FC = () => {
-    const[email, setEmail] = useState<string>('');
-    const[password, setPassword] = useState<string>('');
-    const[confirmPassword, setConfirmPassword] = useState<string>('');
-    const[error, setError] = useState<string | null>(null);
-    const navigate = useNavigate();
-
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-            e.preventDefault();
-
-            if(password !== confirmPassword){
-                setError("Passwords do not match!");
-                return;
-            }
-
-            try
-            {
-                await register(email, password, confirmPassword);
-                navigate('/login');
-            }catch(error: any) {
-                setError("Registration failed!");
-            }
-        };
+    const {
+        email,
+        setEmail,
+        password,
+        setPassword,
+        confirmPassword,
+        setConfirmPassword,
+        error,
+        handleSubmit,
+    } = useRegister();
+    
         return (
         <div className="flex justify-center items-center h-screen bg-gray-100">
             <form onSubmit={handleSubmit} className="bg-white p-6 shadow-lg rounded-lg w-96">
@@ -63,5 +51,4 @@ const Register: React.FC = () => {
         </div>
     )
 }
-
 export default Register

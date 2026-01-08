@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { fetchBasicSets } from "../api/vocab"; 
+import { fetchUserSets } from "../api/vocab"; 
 import type { ISet } from "../interfaces/SetInterface";
 
-export const useVocabSets = () => {
+export const useUserSets = () => {
     const [sets, setSets] = useState<ISet[]>([]);
     const [expandedSetIds, setExpandedSetIds] = useState<number[]>([]);
     const [search, setSearch] = useState("");
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
   
-
   useEffect(() => {
       const loadSets = async () => {
         try {
-          const data = await fetchBasicSets();
+          const data = await fetchUserSets();
           setSets(data);
         } catch (err: any) {
           setError(err.toString());
@@ -45,4 +44,4 @@ export const useVocabSets = () => {
     filteredSets
   };
 };
-export default useVocabSets;
+export default useUserSets;

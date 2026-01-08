@@ -7,7 +7,6 @@ export const useBasicSets = () => {
     const [expandedSetIds, setExpandedSetIds] = useState<number[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-  
 
   useEffect(() => {
       const loadSets = async () => {

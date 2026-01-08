@@ -5,6 +5,7 @@ import Register from './pages/Register'
 import Home from './pages/Home'
 import Read from './pages/vocabulary/Read'
 import Flashcards from './pages/games/Flashcards'
+import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
   
@@ -15,7 +16,7 @@ function App() {
           <Route path="/home" element={<Home/>}/>
           <Route path="/login" element={<Login/>}/>
           <Route path="/register" element={<Register/>}/>
-          <Route path="/vocabulary/read" element={<Read/>}/>
+          <Route path="/vocabulary/read" element={<ProtectedRoute requiredRole="User"><Read /></ProtectedRoute>}/>
           <Route path="/games/flashcards" element={<Flashcards/>}/>
       </Routes>
     </Router>

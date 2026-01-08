@@ -1,7 +1,7 @@
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import type { IRow } from "../../interfaces/RowInterface";
-import { useVocabSets } from "../../hooks/useVocabSets";
+import { useUserSets } from "../../hooks/useUserSets";
 
 const Read: React.FC = () => {
   const {
@@ -13,7 +13,7 @@ const Read: React.FC = () => {
     setSearch,
     toggleExpand,
     filteredSets
-    } = useVocabSets();
+    } = useUserSets();
 
   if (loading) {
   return <p>Ładowanie zestawów...</p>;
