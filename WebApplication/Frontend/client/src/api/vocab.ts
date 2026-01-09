@@ -1,27 +1,42 @@
 import api from "./axiosInstance";
 import type { ISet } from "../interfaces/SetInterface";
+import type { GeneralResponse } from "../interfaces/GeneralReponse";
 
 
 const API_URL = '/VocabularySet';
 
 export const fetchBasicSets = async (): Promise<ISet[]> => {
-    try
-    {
+    try{
         const response = await api.get<ISet[]>(`${API_URL}/GetBasicSets`);
         return response.data;
-    }
-    catch(error: any) {
+    }catch(error: any) {
         throw error.response?.data || "Failed to Fetch Basic Vocabulary Sets!";
     }
 };
 
 export const fetchUserSets = async (): Promise<ISet[]> => {
-    try
-    {
+    try{
         const response = await api.get<ISet[]>(`${API_URL}/GetUserSets`);
         return response.data;
-    }
-    catch(error: any) {
+    }catch(error: any) {
         throw error.response?.data || "Failed to Fetch User Vocabulary Sets!";
+    }
+};
+
+export const fetchUserSet = async (setId: number): Promise<ISet> => {
+    try{
+        const response = await api.get<ISet>(`${API_URL}/GetUserSet`,{params:{setId}});
+        return response.data;
+    }catch(error: any) {
+        throw error.response?.data || "Failed to Fetch User Vocabulary Set!";
+    }
+};
+
+export const updateVocabularySet = async (setDto: ISet[]): Promise<GeneralResponse> => {
+    try{
+        const response = await api.put<GeneralResponse>(`${API_URL}/UpdateSet`, setDto);
+        return response.data;
+    }catch(error: any) {
+        throw error.response?.data || "Failed to Update Vocabulary Set!";
     }
 };

@@ -12,7 +12,10 @@ const Read: React.FC = () => {
     search,
     setSearch,
     toggleExpand,
-    filteredSets
+    filteredSets,
+    editedSet,
+    editLoading,
+    onEditSet
     } = useUserSets();
 
   if (loading) {
@@ -45,12 +48,21 @@ const Read: React.FC = () => {
                 <div key={set.id} className="border rounded-lg">
                   {/* Nagłówek zestawu */}
                   <div className={`flex justify-between items-center p-2 cursor-pointer rounded-lg border transition-colors duration-200`} onClick={() => toggleExpand(set.id)}>
-                    <div className="flex flex-col">
-                      <span className="font-medium">{set.title}</span>
-                      <span className="text-gray-500 text-sm">{set.rows.length} słówek</span>
+                    {/* Lewa strona */}
+                    <div className="flex items-center gap-3">
+                      <div className="flex flex-col">
+                        <span className="font-medium">{set.title}</span>
+                        <span className="text-gray-500 text-sm">
+                          {set.rows.length} słówek
+                        </span>
+                      </div>
+                      <button className="text-gray-500 hover:text-gray-700" onClick={(e) => {e.stopPropagation();toggleExpand(set.id);}}>
+                        {isExpanded ? "▲" : "▼"}
+                      </button>
                     </div>
+                    {/* Prawa strona */}
                     <div className="flex items-center gap-2">
-                      <button className="text-gray-500 hover:text-gray-700" onClick={(e) => { e.stopPropagation(); toggleExpand(set.id); }}> {isExpanded ? "▲" : "▼"}</button>
+                      <button className="text-blue-500 hover:text-blue-700 text-sm" onClick={(e) => {e.stopPropagation(); onEditSet(set.id);}}>Edytuj</button>
                     </div>
                   </div>
                   {/* Lista słówek */}
@@ -67,8 +79,39 @@ const Read: React.FC = () => {
           </div>
         </div>
         {/* Główne okno */}
-        <div className="flex-1 flex flex-col items-center justify-center p-6">
+        <div className="flex-1 flex flex-col p-6 overflow-y-auto">
+            {!editedSet && (
+            <div className="flex items-center justify-center h-full text-gray-400">
+              Wybierz zestaw do edycji
+            </div>
+          )}
+          {editLoading && (
+            <div className="flex items-center justify-center h-full">
+              Ładowanie zestawu...
+            </div>
+          )}
 
+          {editedSet && !editLoading && (
+            <div className="max-w-3xl w-full mx-auto bg-white rounded-lg shadow p-6">
+              {/* Tytuł */}
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-gray-600 mb-1">Tytuł zestawu</label>
+                <input type="text" value={editedSet.title} className="w-full border rounded-lg p-2" readOnly/>
+              </div>
+              {/* Lista słówek */}
+              <div>
+                <h3 className="text-lg font-semibold mb-3">Słówka</h3>
+                <div className="space-y-2">
+                  {editedSet.rows.map((row) => (
+                    <div key={row.id} className="grid grid-cols-2 gap-4">
+                      <input type="text" value={row.term} className="border rounded-lg p-2" readOnly/>
+                      <input type="text" value={row.translation} className="border rounded-lg p-2" readOnly/>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
