@@ -32,7 +32,7 @@ export const fetchUserSet = async (setId: number): Promise<ISet> => {
     }
 };
 
-export const updateVocabularySet = async (setDto: ISet[]): Promise<GeneralResponse> => {
+export const updateVocabularySet = async (setDto: ISet): Promise<GeneralResponse> => {
     try{
         const response = await api.put<GeneralResponse>(`${API_URL}/UpdateSet`, setDto);
         return response.data;

@@ -24,7 +24,7 @@ const Header: React.FC = () => {
             <li><Link to="/admin-panel" className="text-red-600 hover:text-red-700 transition">Panel Admina</Link></li>
           )}
           {role === "User" && (
-            <li><Link to="/vocabulary/read" className="text-green-600 hover:text-green-700 transition">Moje Zestawy</Link></li>
+            <li><Link to="/vocabulary" className="text-green-600 hover:text-green-700 transition">Moje Zestawy</Link></li>
           )}
         </ul>
 

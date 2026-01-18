@@ -1,7 +1,9 @@
-import Header from "../../components/Header";
-import Footer from "../../components/Footer";
-import type { IRow } from "../../interfaces/RowInterface";
-import { useUserSets } from "../../hooks/useUserSets";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+import Editor from "../components/vocabSets/Editor";
+import type { IRow } from "../interfaces/RowInterface";
+import { useUserSets } from "../hooks/useUserSets";
+
 
 const Read: React.FC = () => {
   const {
@@ -13,9 +15,12 @@ const Read: React.FC = () => {
     setSearch,
     toggleExpand,
     filteredSets,
+    onEditSet,
     editedSet,
     editLoading,
-    onEditSet
+    setEditedSet,
+    onSaveSet,
+    saveLoading,
     } = useUserSets();
 
   if (loading) {
@@ -80,38 +85,7 @@ const Read: React.FC = () => {
         </div>
         {/* Główne okno */}
         <div className="flex-1 flex flex-col p-6 overflow-y-auto">
-            {!editedSet && (
-            <div className="flex items-center justify-center h-full text-gray-400">
-              Wybierz zestaw do edycji
-            </div>
-          )}
-          {editLoading && (
-            <div className="flex items-center justify-center h-full">
-              Ładowanie zestawu...
-            </div>
-          )}
-
-          {editedSet && !editLoading && (
-            <div className="max-w-3xl w-full mx-auto bg-white rounded-lg shadow p-6">
-              {/* Tytuł */}
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-600 mb-1">Tytuł zestawu</label>
-                <input type="text" value={editedSet.title} className="w-full border rounded-lg p-2" readOnly/>
-              </div>
-              {/* Lista słówek */}
-              <div>
-                <h3 className="text-lg font-semibold mb-3">Słówka</h3>
-                <div className="space-y-2">
-                  {editedSet.rows.map((row) => (
-                    <div key={row.id} className="grid grid-cols-2 gap-4">
-                      <input type="text" value={row.term} className="border rounded-lg p-2" readOnly/>
-                      <input type="text" value={row.translation} className="border rounded-lg p-2" readOnly/>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
+          <Editor editedSet={editedSet} editLoading={editLoading} saveLoading={saveLoading} setEditedSet={setEditedSet} onSaveSet={onSaveSet}/>
         </div>
       </div>
 

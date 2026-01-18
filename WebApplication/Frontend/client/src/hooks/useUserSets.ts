@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchUserSets, fetchUserSet } from "../api/vocab"; 
+import { fetchUserSets, fetchUserSet, updateVocabularySet} from "../api/vocab"; 
 import type { ISet } from "../interfaces/SetInterface";
 
 export const useUserSets = () => {
@@ -10,6 +10,7 @@ export const useUserSets = () => {
     const [error, setError] = useState<string | null>(null);
     const [editedSet, setEditedSet] = useState<ISet | null>(null);
     const [editLoading, setEditLoading] = useState(false);
+    const [saveLoading, setSaveLoading] = useState(false);
   
   useEffect(() => {
       const loadSets = async () => {
@@ -47,6 +48,23 @@ export const useUserSets = () => {
       setEditLoading(false);
     }
   };
+
+  const onSaveSet = async () => {
+  if (!editedSet) return;
+
+  try {
+    setSaveLoading(true);
+    setError(null);
+    await updateVocabularySet(editedSet);
+    setSets(prev =>
+      prev.map(set => set.id === editedSet.id ? editedSet : set));
+    } catch (err: any) {
+      setError(err.toString());
+    } finally {
+      setSaveLoading(false);
+    }
+  };
+
   
   return {
     loading,
@@ -59,7 +77,10 @@ export const useUserSets = () => {
     filteredSets,
     editedSet,
     editLoading,
+    setEditedSet,
     onEditSet,
+    onSaveSet,
+    saveLoading,
   };
 };
 export default useUserSets;
